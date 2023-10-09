@@ -10,11 +10,13 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_DEFAULT;
+
 @Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+@JsonInclude(NON_DEFAULT)
 public class User {
     private Long id;
     @NotEmpty(message = "First name cannot be empty")

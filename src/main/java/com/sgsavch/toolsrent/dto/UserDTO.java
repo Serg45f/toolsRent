@@ -1,10 +1,14 @@
 package com.sgsavch.toolsrent.dto;
 
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class UserDTO {
     private Long id;
     private String firstName;
@@ -19,4 +23,6 @@ public class UserDTO {
     private boolean isNonLocked;
     private boolean isUsingMfa;
     private LocalDateTime createdAt;
+    private String roleName;
+    private String permissions;
 }

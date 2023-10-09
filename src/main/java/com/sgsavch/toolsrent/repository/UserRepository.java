@@ -1,6 +1,7 @@
 package com.sgsavch.toolsrent.repository;
 
 import com.sgsavch.toolsrent.domain.User;
+import com.sgsavch.toolsrent.dto.UserDTO;
 
 import java.util.Collection;
 
@@ -13,4 +14,8 @@ public interface UserRepository<T extends User> {
     Boolean delete(Long id);
 
     /* More Complex Operations */
+
+    User getUserByEmail(String email);
+
+    void sendFerificationCode(UserDTO user);
 }

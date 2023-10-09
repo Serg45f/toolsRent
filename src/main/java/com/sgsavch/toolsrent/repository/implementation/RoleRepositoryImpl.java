@@ -49,22 +49,36 @@ public class RoleRepositoryImpl implements RoleRepository<Role> {
 
     @Override
     public void addRoleToUser(Long userId, String roleName) {
-        log.info("Adding role {} to user id: {}", roleName, userId);
-//        try {
-            Role role = jdbc.queryForObject(SELECT_ROLE_BY_NAME_QUERY, of("roleName", roleName), new RoleRowMapper());
-            log.info("Role: {}, to permissions: {}", role.getId(), role.getPermission());
+        log.info("addRoleToUser: Adding role {} to user id: {}", roleName, userId);
+        try {
+            Role role = jdbc.queryForObject(SELECT_ROLE_BY_NAME_QUERY, of("name", roleName), new RoleRowMapper());
+            log.info("addRoleToUser: Role: {}, to permissions: {}", role.getId(), role.getPermission());
             jdbc.update(INSERT_ROLE_TO_USER_QUERY, of("userId", userId, "roleId", requireNonNull(role).getId()));
-//        } catch (EmptyResultDataAccessException exception) {
-//            throw new ApiException("No role found by name: " + ROLE_USER.name());
-//
-//        } catch (Exception e) {
-//            throw new ApiException("An addRoleToUser error occurred.");
-//        }
+        } catch (EmptyResultDataAccessException exception) {
+            log.error(exception.getMessage());
+            throw new ApiException("No role found by name: " + ROLE_USER.name());
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new ApiException("An addRoleToUser error occurred.");
+        }
     }
 
     @Override
     public Role getRoleByUserId(Long userId) {
-        return null;
+        log.info("getRoleByUserId: Getting role for user id: {}",  userId);
+
+        try {
+            Role role = jdbc.queryForObject(SELECT_ROLE_BY_USER_ID_QUERY, of("id", userId), new RoleRowMapper());
+            log.info("getRoleByUserId: Role: {}",  role);
+            return  role;
+        } catch (EmptyResultDataAccessException exception) {
+            log.error(exception.getMessage());
+            throw new ApiException("No role found by name: " + ROLE_USER.name());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new ApiException("An addRoleToUser error occurred.");
+        }
     }
 
     @Override
