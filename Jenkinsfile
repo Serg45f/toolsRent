@@ -1,15 +1,14 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3.9.4-eclipse-temurin-17-alpine'
-            args '-v /root/.m2:/root/.m2'
-        }
-    }
-    stages {
-        stage('Building') {
-            steps {
-                sh 'mvn -B -DskipTests clean package'
-            }
+    agent any
+      tools {
+        maven 'maven-3.6.3'
+      }
+      stages {
+        stage ('Building') {
+          steps {
+           echo 'Building..'
+            sh 'mvn clean package'
+          }
         }
         stage('Testing') {
             steps {
@@ -19,6 +18,9 @@ pipeline {
         stage('Deploying') {
              steps {
                  echo 'Deploying....'
+                 script {
+                           deploy adapters: [tomcat9(credentialsId: 'tomcat_credential', path: '', url: 'http://dayal-test.letspractice.tk:8081')], contextPath: '/pipeline', onFailure: false, war: 'webapp/target/*.war'
+                         }
              }
         }
     }
